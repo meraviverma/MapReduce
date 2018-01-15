@@ -1,0 +1,33 @@
+public static class IntSumReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+    private IntWritable result = new IntWritable();
+   public void reduce(Text key, Iterable<IntWritable> values,Context context ) throws IOException, InterruptedException {
+    int sum = 0;
+    for (IntWritable val : values) {
+    sum += val.get();  }
+    result.set(sum);
+    context.write(key, result);
+    }
+}
+
+-------------------------------Explanation-------------------------------------
+
+line 1     extends the default Reducer class with arguments KeyIn as Text and ValueIn as IntWritable which are same as the outputs
+of the mapper class and KeyOut as Text and ValueOut as IntWritable which will be     final outputs of our MapReduce program.
+
+In line 2 we are declaring a IntWritable variable result which will store the number of occurrences of a word in the input dataset
+file.    
+
+In line 3 we are overriding the Reduce method which will run each time for     every key.
+
+In line 4 we are declaring a variable ‘sum’ of type intWritable and Initialized as 0. Which will store the sum of all the 
+individual repeated words into it.
+
+In line 5 a foreach loop is taken which will run each time for the values inside the “Iterable values” which are coming from the 
+shuffle and sort phase after the mapper phase. We are taking another variable as ‘val’ which will be incremented every time as 
+many values are there for that key.
+
+In line 6 Iterate through all the values with respect to a key and sum up all of them.
+
+In line 7 we are storing the sum of the values in ‘result’ variable.
+
+In line 8 Form key value pairs for each word as <key,result> and push it to the output context
